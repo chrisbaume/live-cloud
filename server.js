@@ -4,7 +4,7 @@ var io = require('socket.io').listen(8081);
 var fs = require('fs');
 var chokidar = require('chokidar');
 
-var DIR='/home/chrisbau/autorecord/all-trans/';
+var DIR='/home/chrisbau/confvis/live-asr/all-trans/';
 var watcher = chokidar.watch(DIR, {ignored: /^\./, persistent: true});
 
 var process = function(callback)
@@ -22,7 +22,7 @@ var process = function(callback)
     {
       // read it
       c++;
-      fs.readFile(DIR+file, 'utf-8', function(err, content)
+      fs.readFile(DIR+file, function(err, content)
       {
         if (err) throw err;
 
@@ -54,9 +54,12 @@ io.sockets.on('connection', function(socket)
 
   // trigger when new file is added
   watcher.on('add', function(path) {
-    process(function(words) {
-      socket.emit('words', words);
-    });
+    // delay to avoid race condition
+    setTimeout(function() {
+      process(function(words) {
+        socket.emit('words', words);
+      });
+    }, 500);
   });
 });
 
