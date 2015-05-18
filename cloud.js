@@ -1,7 +1,7 @@
 var fill = d3.scale.category20b();
 
-var w = 960,
-    h = 600;
+var w = 1000,
+    h = 744;
 
 var words = [],
     max,
@@ -353,7 +353,7 @@ d3.select("#random-palette").on("click", function() {
 
     data.forEach(function(word) {
       if (discard.test(word)) return;
-      word = word.replace(punctuation, "");
+      word = word.replace(".", "");
       if (stopWords.test(word.toLowerCase())) return;
       console.log(word+' '+stopWords.test(word.toLowerCase()));
       word = word.substr(0, maxLength);
