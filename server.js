@@ -25,6 +25,11 @@ var process = function(callback)
       fs.readFile(DIR+file, function(err, content)
       {
         if (err) throw err;
+        
+        if (content=='null') {
+          c--;
+          return;
+        }
 
         // extract list of words
         var newWords = JSON.parse(content).words;
